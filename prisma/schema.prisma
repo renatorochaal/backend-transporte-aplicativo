@@ -1,0 +1,99 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model MotoristaVeiculo {
+  cpf_motorista BigInt
+  placa_veiculo String @db.Char(7)
+
+  motorista Motoristas @relation(fields: [cpf_motorista], references: [cpf_motorista])
+  veiculo   Veiculo    @relation(fields: [placa_veiculo], references: [placa])
+
+  @@id([cpf_motorista, placa_veiculo])
+}
+
+model Motoristas {
+  cpf_motorista BigInt @id
+  cnh           String @db.VarChar(15)
+  banco_mot     Int
+  agencia_mot   Int
+  conta_mot     Int
+
+  veiculos MotoristaVeiculo[]
+  viagens  Viagem[]           @relation("MotoristaViagens")
+}
+
+model Passageiros {
+  cpf_passag      BigInt  @id
+  cartao_cred     String? @db.VarChar(20)
+  bandeira_cartao String? @db.VarChar(20)
+  cidade_orig     String? @db.VarChar(30)
+
+  viagens Viagem[] @relation("PassageiroViagens")
+}
+
+model Pessoas {
+  cpf_pessoa BigInt  @id
+  nome       String  @db.VarChar(50)
+  endereco   String? @db.VarChar(50)
+  telefone   BigInt?
+  sexo       String  @db.Char(1)
+  email      String? @db.VarChar(30)
+}
+
+model Proprietarios {
+  cpf_prop     BigInt @id
+  cnh_prop     String @db.VarChar(15)
+  banco_prop   Int
+  agencia_prop Int
+  conta_prop   Int
+
+  veiculos Veiculo[]
+}
+
+model TipoPagto {
+  cod_pagto  Int    @id
+  desc_pagto String @db.VarChar(20)
+}
+
+model Veiculo {
+  placa                     String @id @db.Char(7)
+  marca                     String @db.VarChar(30)
+  modelo                    String @db.VarChar(30)
+  ano_fabric                Int
+  capacidade_pass           Int
+  cor                       String @db.VarChar(30)
+  tipo_combust              String @db.Char(1)
+  potencia_motor            Int?
+  veiculo_proprietarios__fk BigInt
+
+  motoristaVeiculos MotoristaVeiculo[]
+  proprietario      Proprietarios      @relation(fields: [veiculo_proprietarios__fk], references: [cpf_prop])
+  viagens           Viagem[]
+}
+
+model Viagem {
+  cpf_pass_viag   BigInt
+  cpf_mot_viag    BigInt
+  placa_veic_viag String    @db.Char(7)
+  local_orig_viag String?   @db.VarChar(30)
+  local_dest_viag String?   @db.VarChar(30)
+  dt_hora_inicio  DateTime
+  dt_hora_fim     DateTime?
+  qtde_pass       Int?
+  forma_pagto     String?   @db.VarChar(10)
+  valor_pagto     Decimal?  @db.Decimal(10, 2)
+  cancelam_mot    String?   @db.Char(1)
+  cancelam_pass   String?   @db.Char(1)
+
+  motorista  Motoristas  @relation("MotoristaViagens", fields: [cpf_mot_viag], references: [cpf_motorista])
+  passageiro Passageiros @relation("PassageiroViagens", fields: [cpf_pass_viag], references: [cpf_passag])
+  veiculo    Veiculo     @relation(fields: [placa_veic_viag], references: [placa])
+
+  @@id([cpf_pass_viag, cpf_mot_viag, placa_veic_viag])
+}
