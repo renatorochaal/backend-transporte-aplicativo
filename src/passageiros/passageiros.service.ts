@@ -2,24 +2,36 @@ import { Injectable, ConflictException, NotFoundException } from '@nestjs/common
 import { PrismaService } from '../prisma.service';
 import { CreatePassageiroDto } from './dto/create-passageiro.dto';
 import { UpdatePassageiroDto } from './dto/update-passageiro.dto';
+import { PessoasService } from '../pessoas/pessoas.service'; // Importe o PessoasService
+import { CreatePessoaDto } from '../pessoas/dto/create-pessoa.dto'; // Importe o CreatePessoaDto
 
 @Injectable()
 export class PassageirosService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly pessoasService: PessoasService, // Injete o PessoasService
+  ) { }
 
   async create(createPassageiroDto: CreatePassageiroDto) {
     const existingPassageiro = await this.prisma.passageiros.findUnique({
-      where: { cpf_passag: BigInt(createPassageiroDto.cpf_passag) },
+      where: { cpf_passag: BigInt(createPassageiroDto.cpf_pessoa) },
     });
 
     if (existingPassageiro) {
       throw new ConflictException('Passageiro com este CPF já existe');
     }
 
+    // Create the Pessoa
+    const createPessoaDto = new CreatePessoaDto();
+    createPessoaDto.cpf_pessoa = createPassageiroDto.cpf_pessoa;
+    // Copy other necessary attributes from createPassageiroDto to createPessoaDto
+    const pessoa = await this.pessoasService.create(createPessoaDto);
+
+    // Create the Passageiro
     const passageiro = await this.prisma.passageiros.create({
       data: {
         ...createPassageiroDto,
-        cpf_passag: BigInt(createPassageiroDto.cpf_passag),
+        cpf_passag: BigInt(createPassageiroDto.cpf_pessoa), // Use the same CPF for cpf_passag
       },
       include: {
         viagens: true,

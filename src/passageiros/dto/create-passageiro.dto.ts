@@ -1,11 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { CreatePessoaDto } from '../../pessoas/dto/create-pessoa.dto';
 
-export class CreatePassageiroDto {
-    @ApiProperty({ example: '12345678901', description: 'CPF do passageiro' })
-    @IsNotEmpty({ message: 'CPF do passageiro não pode estar vazio' })
-    cpf_passag: bigint;
 
+export class CreatePassageiroDto extends CreatePessoaDto {
     @ApiProperty({ example: '1234567890123456', description: 'Cartão de crédito do passageiro', required: false })
     @IsString({ message: 'Cartão de crédito deve ser uma string' })
     @IsOptional()

@@ -6,17 +6,18 @@ WORKDIR /home/node/app
 
 COPY package*.json ./
 
+RUN npm install -g @nestjs/cli
 RUN npm install
 
 COPY . .
 
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY entrypoint.sh /app/
+RUN chmod +x /app/entrypoint.sh
 
 RUN npm run build
 
 EXPOSE 3000
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 CMD ["npm", "run", "start:dev"]
