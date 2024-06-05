@@ -17,6 +17,8 @@ export class PassageirosService {
       where: { cpf_passag: BigInt(createPassageiroDto.cpf_pessoa) },
     });
 
+    console.log(createPassageiroDto);
+
     if (existingPassageiro) {
       throw new ConflictException('Passageiro com este CPF já existe');
     }
@@ -24,13 +26,20 @@ export class PassageirosService {
     // Create the Pessoa
     const createPessoaDto = new CreatePessoaDto();
     createPessoaDto.cpf_pessoa = createPassageiroDto.cpf_pessoa;
-    // Copy other necessary attributes from createPassageiroDto to createPessoaDto
-    const pessoa = await this.pessoasService.create(createPessoaDto);
+    createPessoaDto.nome = createPassageiroDto.nome;
+    createPessoaDto.sexo = createPassageiroDto.sexo;
+    createPessoaDto.endereco = createPassageiroDto.endereco;
+    createPessoaDto.telefone = createPassageiroDto.telefone;
+    createPessoaDto.email = createPassageiroDto.email;
 
+    // Copy other necessary attributes from createPassageiroDto to createPessoaDto
+    await this.pessoasService.create(createPessoaDto);
     // Create the Passageiro
     const passageiro = await this.prisma.passageiros.create({
       data: {
-        ...createPassageiroDto,
+        cartao_cred: createPassageiroDto.cartao_cred,
+        bandeira_cartao: createPassageiroDto.bandeira_cartao,
+        cidade_orig: createPassageiroDto.cidade_orig,
         cpf_passag: BigInt(createPassageiroDto.cpf_pessoa), // Use the same CPF for cpf_passag
       },
       include: {
