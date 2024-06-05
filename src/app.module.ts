@@ -8,9 +8,10 @@ import { TipoPagtoModule } from './tipo-pagto/tipo-pagto.module';
 import { ViagemModule } from './viagem/viagem.module';
 import { PessoasModule } from './pessoas/pessoas.module';
 import { MotoristaVeiculoModule } from './motorista-veiculo/motorista-veiculo.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
-  imports: [PrismaModule, MotoristasModule, PassageirosModule, VeiculoModule, ProprietariosModule, TipoPagtoModule, ViagemModule, PessoasModule, MotoristaVeiculoModule],
+  imports: [PrismaModule, MotoristasModule, PassageirosModule, VeiculoModule, ProprietariosModule, TipoPagtoModule, ViagemModule, PessoasModule, MotoristaVeiculoModule, ReportsModule],
   controllers: [],
   providers: [],
 })
