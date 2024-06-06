@@ -97,22 +97,13 @@ export class ViagemController {
   }
 
   @Get('media-mensal-viagens')
+  @ApiOperation({ summary: 'Mostrar a média mensal de viagens, de passageiros de cada sexo' })
+  @ApiResponse({ status: 200, description: 'Média mensal de viagens retornada com sucesso.' })
   async getMediaMensalViagens(
-    @Query('anoInicio') anoInicio: string,
-    @Query('anoFim') anoFim: string
+    @Query('anoInicio') anoInicio: number,
+    @Query('anoFim') anoFim: number
   ) {
-    const anoInicioInt = parseInt(anoInicio, 10);
-    const anoFimInt = parseInt(anoFim, 10);
-    
-    if (isNaN(anoInicioInt) || isNaN(anoFimInt)) {
-      throw new Error('Ano de início e fim devem ser números válidos');
-    }
-  
-    return this.viagemService.getMediaMensalViagens(anoInicioInt, anoFimInt);
+    return this.viagemService.getMediaMensalViagens(anoInicio, anoFim);
   }
-  
-  
-  
-
-
 }
+  

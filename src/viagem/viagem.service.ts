@@ -298,9 +298,9 @@ export class ViagemService {
   async getMediaMensalViagens(anoInicio: number, anoFim: number) {
     const inicio = new Date(anoInicio, 0, 1);
     const fim = new Date(anoFim, 11, 31, 23, 59, 59);
-  
+
     console.log('inicio', inicio, 'fim', fim);
-  
+
     const viagens = await this.prisma.viagem.findMany({
       where: {
         dt_hora_inicio: {
@@ -309,39 +309,35 @@ export class ViagemService {
         },
       },
       include: {
-        passageiro: {
-          include: {
-            pessoa: true,
-          },
-        },
+        passageiro: true, // Não inclui 'pessoa', apenas 'passageiro'
       },
     });
-  
+
     type ContagemPorSexo = { M: number; F: number };
     type ViagensPorMes = Record<string, ContagemPorSexo>;
-  
+
     const viagensPorMesESexo: ViagensPorMes = viagens.reduce((acc, viagem) => {
-      if (!viagem.passageiro?.pessoa) {
-        return acc; // Ignorar viagens sem passageiro ou sem pessoa associada
+      if (!viagem.passageiro) {
+        return acc; // Ignorar viagens sem passageiro
       }
-  
+
       const mesAno = `${viagem.dt_hora_inicio.getFullYear()}-${viagem.dt_hora_inicio.getMonth() + 1}`;
-      const sexo = viagem.passageiro.pessoa.sexo;
-  
+      const sexo = viagem.passageiro.sexo;
+
       console.log('mesAno', mesAno, 'sexo', sexo);
-  
+
       if (!acc[mesAno]) {
         acc[mesAno] = { M: 0, F: 0 };
       }
-  
+
       if (sexo) {
         acc[mesAno][sexo] += 1;
       }
       return acc;
     }, {} as ViagensPorMes);
-  
+
     const totalAnos = anoFim - anoInicio + 1;
-  
+
     const mediaMensal = Object.entries(viagensPorMesESexo).map(([mesAno, contagem]) => {
       const [ano, mes] = mesAno.split('-').map(Number);
       return {
@@ -351,13 +347,7 @@ export class ViagemService {
         mediaFeminina: contagem.F / totalAnos,
       };
     });
-  
+
     return mediaMensal;
   }
-  
-  
-  
-  
-  
 }
-
