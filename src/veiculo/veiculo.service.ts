@@ -1,35 +1,56 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateVeiculoDto } from './dto/create-veiculo.dto';
 import { UpdateVeiculoDto } from './dto/update-veiculo.dto';
+import { Console } from 'console';
 
 @Injectable()
 export class VeiculoService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
+
 
   async create(createVeiculoDto: CreateVeiculoDto) {
-    const existingVeiculo = await this.prisma.veiculo.findUnique({
-      where: { placa: createVeiculoDto.placa },
-    });
+    try {
+      const existingVeiculo = await this.prisma.veiculo.findUnique({
+        where: { placa: createVeiculoDto.placa },
+      });
 
-    if (existingVeiculo) {
-      throw new ConflictException('Veículo com esta placa já existe');
+      if (existingVeiculo) {
+        throw new ConflictException('Veículo com esta placa já existe');
+      }
+
+      console.log(createVeiculoDto.veiculo_proprietarios__fk);
+
+      // Verifique se o proprietário existe
+      const proprietario = await this.prisma.proprietarios.findUnique({
+        where: { cpf_prop: BigInt(createVeiculoDto.veiculo_proprietarios__fk) },
+      });
+
+      if (!proprietario) {
+        throw new NotFoundException('Proprietário não encontrado');
+      }
+
+      const veiculo = await this.prisma.veiculo.create({
+        data: {
+          ...createVeiculoDto,
+          veiculo_proprietarios__fk: BigInt(createVeiculoDto.veiculo_proprietarios__fk),
+        },
+        include: {
+          motoristaVeiculos: true,
+          proprietario: true,
+          viagens: true,
+        },
+      });
+
+      console.log(veiculo);
+
+      return this.toVeiculoDto(veiculo);
+    } catch (error) {
+      console.error('Erro ao criar veículo:', error);
+      throw new InternalServerErrorException('Erro ao criar veículo');
     }
-
-    const veiculo = await this.prisma.veiculo.create({
-      data: {
-        ...createVeiculoDto,
-        veiculo_proprietarios__fk: BigInt(createVeiculoDto.veiculo_proprietarios__fk),
-      },
-      include: {
-        motoristaVeiculos: true,
-        proprietario: true,
-        viagens: true,
-      },
-    });
-
-    return this.toVeiculoDto(veiculo);
   }
+  
 
   async findAll() {
     const veiculos = await this.prisma.veiculo.findMany({

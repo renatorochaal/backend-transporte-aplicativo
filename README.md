@@ -43,6 +43,9 @@ Este projeto é uma aplicação de controle de viagens urbanas de passageiros co
 
 ### Estrutura do `docker-compose.yml`
 
+### Arquivo teste-app.json
+- O arquivo pode ser importado para o Postman assim ja criando todos os endpoint com modelos a serem cadastrados no sistema.
+
 ```yaml
 version: '3.8'
 

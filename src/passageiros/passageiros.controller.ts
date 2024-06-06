@@ -50,4 +50,10 @@ export class PassageirosController {
   remove(@Param('cpf_passag') cpf_passag: string) {
     return this.passageirosService.remove(cpf_passag);
   }
+
+  @Post('update-sexo')
+  @HttpCode(HttpStatus.OK)
+  async updateSexo() {
+    return this.passageirosService.updateSexoPassageiros();
+  }
 }

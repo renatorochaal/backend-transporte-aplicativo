@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query } from '@nestjs/common';
 import { ViagemService } from './viagem.service';
 import { CreateViagemDto } from './dto/create-viagem.dto';
 import { UpdateViagemDto } from './dto/update-viagem.dto';
@@ -62,4 +62,57 @@ export class ViagemController {
   ) {
     return this.viagemService.remove(cpf_pass_viag, cpf_mot_viag, placa_veic_viag);
   }
+
+  @Get('marca')
+  @ApiOperation({ summary: 'Obter viagens de veículos de uma marca específica em um período' })
+  @ApiResponse({ status: 200, description: 'Lista de viagens retornada com sucesso.' })
+  async getViagensByMarca(
+    @Query('marca') marca: string,
+    @Query('data') data: string,
+    @Query('horaInicio') horaInicio: string,
+    @Query('horaFim') horaFim: string
+  ) {
+    return this.viagemService.getViagensByMarca(marca, data, horaInicio, horaFim);
+  }
+
+  @Get('maiores-faturamentos')
+  @ApiOperation({ summary: 'Obter os maiores faturamentos em um mês específico' })
+  @ApiResponse({ status: 200, description: 'Lista dos maiores faturamentos retornada com sucesso.' })
+  async getMaioresFaturamentos(
+    @Query('ano') ano: number,
+    @Query('mes') mes: number
+  ) {
+    return this.viagemService.getMaioresFaturamentos(ano, mes);
+  }
+
+
+  @Get('faturamento-veiculos')
+  @ApiOperation({ summary: 'Obter faturamento dos veículos em um mês específico' })
+  @ApiResponse({ status: 200, description: 'Faturamento dos veículos retornado com sucesso.' })
+  async getFaturamentoPorVeiculo(
+    @Query('ano') ano: number,
+    @Query('mes') mes: number
+  ) {
+    return this.viagemService.getFaturamentoPorVeiculo(ano, mes);
+  }
+
+  @Get('media-mensal-viagens')
+  async getMediaMensalViagens(
+    @Query('anoInicio') anoInicio: string,
+    @Query('anoFim') anoFim: string
+  ) {
+    const anoInicioInt = parseInt(anoInicio, 10);
+    const anoFimInt = parseInt(anoFim, 10);
+    
+    if (isNaN(anoInicioInt) || isNaN(anoFimInt)) {
+      throw new Error('Ano de início e fim devem ser números válidos');
+    }
+  
+    return this.viagemService.getMediaMensalViagens(anoInicioInt, anoFimInt);
+  }
+  
+  
+  
+
+
 }

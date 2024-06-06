@@ -13,4 +13,7 @@ export class UpdatePassageiroDto extends PartialType(CreatePassageiroDto) {
 
     @ApiProperty({ example: 'São Paulo', description: 'Cidade de origem', required: false })
     cidade_orig?: string;
+
+    @ApiProperty({ example: 'F', description: 'Sexo do passageiro', required: false })
+    sexo?: string; // Adicione este campo
 }

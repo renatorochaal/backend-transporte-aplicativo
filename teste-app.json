@@ -1,0 +1,459 @@
+{
+  "info": {
+    "name": "Transporte de Passageiros API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Viagens",
+      "item": [
+        {
+          "name": "GET Viagens por Marca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/viagens/marca?marca={{marca}}&data={{data}}&horaInicio={{horaInicio}}&horaFim={{horaFim}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens", "marca"],
+              "query": [
+                { "key": "marca", "value": "{{marca}}" },
+                { "key": "data", "value": "{{data}}" },
+                { "key": "horaInicio", "value": "{{horaInicio}}" },
+                { "key": "horaFim", "value": "{{horaFim}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Maiores Faturamentos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/viagens/maiores-faturamentos?ano={{ano}}&mes={{mes}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens", "maiores-faturamentos"],
+              "query": [
+                { "key": "ano", "value": "{{ano}}" },
+                { "key": "mes", "value": "{{mes}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Faturamento de Veículos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/viagens/faturamento-veiculos?ano={{ano}}&mes={{mes}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens", "faturamento-veiculos"],
+              "query": [
+                { "key": "ano", "value": "{{ano}}" },
+                { "key": "mes", "value": "{{mes}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Média Mensal de Viagens",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/viagens/media-mensal-viagens?anoInicio={{anoInicio}}&anoFim={{anoFim}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens", "media-mensal-viagens"],
+              "query": [
+                { "key": "anoInicio", "value": "{{anoInicio}}" },
+                { "key": "anoFim", "value": "{{anoFim}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Criar Viagem",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cpf_pass_viag\": \"12345678901\",\n    \"cpf_mot_viag\": \"12345678901\",\n    \"placa_veic_viag\": \"ABC1234\",\n    \"local_orig_viag\": \"Rua A, 123\",\n    \"local_dest_viag\": \"Rua B, 456\",\n    \"dt_hora_inicio\": \"2023-05-23T15:00:00Z\",\n    \"dt_hora_fim\": \"2023-05-23T16:00:00Z\",\n    \"qtde_pass\": 3,\n    \"forma_pagto\": \"DINHEIRO\",\n    \"valor_pagto\": 100.50,\n    \"cancelam_mot\": \"N\",\n    \"cancelam_pass\": \"N\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/viagens",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens"]
+            }
+          }
+        },
+        {
+          "name": "GET Todas as Viagens",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/viagens",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens"]
+            }
+          }
+        },
+        {
+          "name": "GET Viagem por IDs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/viagens/{{cpf_pass_viag}}/{{cpf_mot_viag}}/{{placa_veic_viag}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens", "{{cpf_pass_viag}}", "{{cpf_mot_viag}}", "{{placa_veic_viag}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Atualizar Viagem",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"local_dest_viag\": \"Rua C, 789\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/viagens/{{cpf_pass_viag}}/{{cpf_mot_viag}}/{{placa_veic_viag}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens", "{{cpf_pass_viag}}", "{{cpf_mot_viag}}", "{{placa_veic_viag}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Remover Viagem",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/viagens/{{cpf_pass_viag}}/{{cpf_mot_viag}}/{{placa_veic_viag}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["viagens", "{{cpf_pass_viag}}", "{{cpf_mot_viag}}", "{{placa_veic_viag}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Motoristas",
+      "item": [
+        {
+          "name": "POST Criar Motorista",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cpf_motorista\": \"12345678901\",\n    \"cnh\": \"123456789012345\",\n    \"banco_mot\": 1,\n    \"agencia_mot\": 1234,\n    \"conta_mot\": 123456\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/motoristas",
+              "host": ["{{BASE_URL}}"],
+              "path": ["motoristas"]
+            }
+          }
+        },
+        {
+          "name": "GET Todos os Motoristas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/motoristas",
+              "host": ["{{BASE_URL}}"],
+              "path": ["motoristas"]
+            }
+          }
+        },
+        {
+          "name": "GET Motorista por CPF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/motoristas/{{cpf_motorista}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["motoristas", "{{cpf_motorista}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Atualizar Motorista",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"agencia_mot\": 5678\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/motoristas/{{cpf_motorista}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["motoristas", "{{cpf_motorista}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Remover Motorista",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/motoristas/{{cpf_motorista}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["motoristas", "{{cpf_motorista}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Passageiros",
+      "item": [
+        {
+          "name": "POST Criar Passageiro",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cpf_passag\": \"12345678901\",\n    \"cartao_cred\": \"1234567890123456\",\n  \"sexo\": \"M|F\",\n  \"bandeira_cartao\": \"VISA\",\n    \"cidade_orig\": \"São Paulo\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/passageiros",
+              "host": ["{{BASE_URL}}"],
+              "path": ["passageiros"]
+            }
+          }
+        },
+        {
+          "name": "GET Todos os Passageiros",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passageiros",
+              "host": ["{{BASE_URL}}"],
+              "path": ["passageiros"]
+            }
+          }
+        },
+        {
+          "name": "GET Passageiro por CPF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passageiros/{{cpf_passag}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["passageiros", "{{cpf_passag}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Atualizar Passageiro",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cidade_orig\": \"Rio de Janeiro\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/passageiros/{{cpf_passag}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["passageiros", "{{cpf_passag}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Remover Passageiro",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passageiros/{{cpf_passag}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["passageiros", "{{cpf_passag}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Veiculos",
+      "item": [
+        {
+          "name": "POST Criar Veículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"placa\": \"ABC1234\",\n    \"marca\": \"Toyota\",\n    \"modelo\": \"Corolla\",\n    \"ano_fabric\": 2021,\n    \"capacidade_pass\": 5,\n    \"cor\": \"Preto\",\n    \"tipo_combust\": \"G\",\n    \"potencia_motor\": 140,\n    \"veiculo_proprietarios__fk\": \"12345678901\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/veiculos",
+              "host": ["{{BASE_URL}}"],
+              "path": ["veiculos"]
+            }
+          }
+        },
+        {
+          "name": "GET Todos os Veículos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/veiculos",
+              "host": ["{{BASE_URL}}"],
+              "path": ["veiculos"]
+            }
+          }
+        },
+        {
+          "name": "GET Veículo por Placa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/veiculos/{{placa}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["veiculos", "{{placa}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Atualizar Veículo",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cor\": \"Azul\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/veiculos/{{placa}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["veiculos", "{{placa}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Remover Veículo",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/veiculos/{{placa}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["veiculos", "{{placa}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Proprietarios",
+      "item": [
+        {
+          "name": "POST Criar Proprietário",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cpf_prop\": \"12345678901\",\n    \"cnh_prop\": \"123456789012345\",\n    \"banco_prop\": 1,\n    \"agencia_prop\": 1234,\n    \"conta_prop\": 123456\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/proprietarios",
+              "host": ["{{BASE_URL}}"],
+              "path": ["proprietarios"]
+            }
+          }
+        },
+        {
+          "name": "GET Todos os Proprietários",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/proprietarios",
+              "host": ["{{BASE_URL}}"],
+              "path": ["proprietarios"]
+            }
+          }
+        },
+        {
+          "name": "GET Proprietário por CPF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/proprietarios/{{cpf_prop}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["proprietarios", "{{cpf_prop}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Atualizar Proprietário",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"agencia_prop\": 5678\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/proprietarios/{{cpf_prop}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["proprietarios", "{{cpf_prop}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Remover Proprietário",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/proprietarios/{{cpf_prop}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["proprietarios", "{{cpf_prop}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

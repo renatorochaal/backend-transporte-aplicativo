@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:postgres@db:5432/cmp1611_db?schema=public"
 }
 
 generator client {
@@ -27,14 +27,14 @@ model Motoristas {
   veiculos MotoristaVeiculo[]
   viagens  Viagem[]           @relation("MotoristaViagens")
 }
-
 model Passageiros {
   cpf_passag      BigInt  @id
   cartao_cred     String? @db.VarChar(20)
   bandeira_cartao String? @db.VarChar(20)
   cidade_orig     String? @db.VarChar(30)
-
-  viagens Viagem[] @relation("PassageiroViagens")
+  sexo            String? @db.VarChar(1) // Adicionando o campo sexo
+  pessoa          Pessoas @relation(fields: [cpf_passag], references: [cpf_pessoa])
+  viagens         Viagem[] @relation("PassageiroViagens")
 }
 
 model Pessoas {
@@ -44,7 +44,10 @@ model Pessoas {
   telefone   BigInt?
   sexo       String  @db.Char(1)
   email      String? @db.VarChar(30)
+
+  passageiro Passageiros?
 }
+
 
 model Proprietarios {
   cpf_prop     BigInt @id

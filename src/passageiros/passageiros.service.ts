@@ -68,6 +68,7 @@ export class PassageirosService {
     return this.toPassageiroDto(passageiro);
   }
 
+
   async remove(cpf_passag: string) {
     await this.findOne(cpf_passag);
     const passageiro = await this.prisma.passageiros.delete({
@@ -90,4 +91,39 @@ export class PassageirosService {
       })) : [],
     };
   }
+
+  
+  async updateSexoPassageiros() {
+    console.log('Atualizando sexo dos passageiros');
+  
+    // Buscar todos os passageiros
+    const passageiros = await this.prisma.passageiros.findMany();
+  
+    console.log('Passageiros encontrados:', passageiros.length);
+  
+    const total = passageiros.length;
+    const metade = Math.floor(total / 2);
+  
+    console.log('Total de passageiros:', total);
+    console.log('Metade:', metade);
+  
+    // Atualizar o sexo dos passageiros
+    for (let i = 0; i < total; i++) {
+      const sexo = i < metade ? 'F' : 'M';
+      await this.prisma.passageiros.update({
+        where: { cpf_passag: passageiros[i].cpf_passag },
+        data: {
+          sexo: sexo,
+        },
+      });
+    }
+    
+    return { message: 'Passageiros atualizados com sucesso' };
+  }
+  
+  
+  
+  
+  
+  
 }
